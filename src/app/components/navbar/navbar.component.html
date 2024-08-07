@@ -1,0 +1,100 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">Library</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="book-list">Books</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+            aria-expanded="false">
+            Categories
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="#" data-genre="fiction">Fiction</a></li>
+            <li><a class="dropdown-item" href="#" data-genre="nonfiction">Non-Fiction</a></li>
+            <li><a class="dropdown-item" href="#" data-genre="science">Science</a></li>
+            <li><a class="dropdown-item" href="#" data-genre="history">History</a></li>
+            <li><a class="dropdown-item" href="#" data-genre="tech">Technology</a></li>
+            <li><a class="dropdown-item" href="#" data-genre="philosophy">Philosophy</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="myPageButton" href="/myPage" style="display:none;">My Page</a>
+        </li>
+      </ul>
+      <form class="d-flex ms-auto" id="searchForm">
+        <input class="form-control me-2" type="search" id="searchInput" placeholder="Search books" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form>
+      <button class="btn btn-outline-primary ms-3" id="loginButton" data-bs-toggle="modal"
+        data-bs-target="#loginModal">Login</button>
+      <button class="btn btn-outline-secondary ms-2" id="signupButton" data-bs-toggle="modal"
+        data-bs-target="#signupModal">Sign Up</button>
+      <button class="btn btn-outline-danger ms-2" id="logoutButton" style="display:none;">Logout</button>
+    </div>
+  </div>
+</nav>
+
+<!-- Login Modal -->
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="loginModalLabel">Login</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="loginForm">
+          <div class="mb-3">
+            <label for="loginUsername" class="form-label">Username</label>
+            <input type="text" class="form-control" id="loginUsername" required>
+          </div>
+          <div class="mb-3">
+            <label for="loginPassword" class="form-label">Password</label>
+            <input type="password" class="form-control" id="loginPassword" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Login</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Sign Up Modal -->
+<div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="signupModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="signupModalLabel">Sign Up</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="signupForm">
+          <div class="mb-3">
+            <label for="signupUsername" class="form-label">Username</label>
+            <input type="text" class="form-control" id="signupUsername" required>
+          </div>
+          <div class="mb-3">
+            <label for="signupEmail" class="form-label">Email address</label>
+            <input type="email" class="form-control" id="signupEmail" required>
+          </div>
+          <div class="mb-3">
+            <label for="signupPassword" class="form-label">Password</label>
+            <input type="password" class="form-control" id="signupPassword" required>
+          </div>
+          <div class="mb-3">
+            <label for="signupConfirmPassword" class="form-label">Confirm Password</label>
+            <input type="password" class="form-control" id="signupConfirmPassword" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Sign Up</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
