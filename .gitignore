@@ -42,3 +42,4 @@ testem.log
 Thumbs.db
 backend/config/database.js
 /.vscode
+package-lock.json
