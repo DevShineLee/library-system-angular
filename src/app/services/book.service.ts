@@ -6,11 +6,11 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class BookService {
-  private apiUrl = '/api/books'; // API 경로가 올바른지 확인
+  private apiUrl = 'http://localhost:3000/api/books';
 
   constructor(private http: HttpClient) {}
 
   getBooks(): Observable<any[]> {
-    return this.http.get<any[]>(this.apiUrl); // Observable이 배열을 반환하도록 타입 지정
+    return this.http.get<any[]>(this.apiUrl);
   }
 }

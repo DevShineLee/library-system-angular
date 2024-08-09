@@ -3,7 +3,7 @@ const router = express.Router()
 const Book = require("../models/book.model")
 
 // http://localhost:3000/api/books
-router.get("/books", async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const books = await Book.find()
     res.json(books)

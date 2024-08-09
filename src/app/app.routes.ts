@@ -1,10 +1,10 @@
-import { Routes } from '@angular/router';
-import { HomeComponent } from './components/home/home.component';
+import { Routes } from '@angular/router'
+import { HomeComponent } from './components/home/home.component'
 
-import { CreateUserComponent } from './components/create-user/create-user.component';
-import { LoginComponent } from './components/login/login.component';
+import { CreateUserComponent } from './components/create-user/create-user.component'
+import { LoginComponent } from './components/login/login.component'
 
-import { BookListComponent } from './components/book-list/book-list.component';
+import { BookListComponent } from './components/book-list/book-list.component'
 
 export const routes: Routes = [
   {
@@ -31,4 +31,4 @@ export const routes: Routes = [
     path: 'login',
     component: LoginComponent,
   },
-];
+]

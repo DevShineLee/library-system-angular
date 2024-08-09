@@ -2,16 +2,21 @@ const mongoose = require("mongoose")
 const bcrypt = require("bcrypt")
 
 const UserSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  passwd: { type: String, required: true },
-  email: { type: String, required: true }
+  username: { type: String, required: true, unique: true }, // Ensure this is 'username', not 'userName'
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true }
 })
 
-// method to compare passwords
-UserSchema.methods.comparePassword = async function(password) {
-  return bcrypt.compare(password, this.password)
-}
+// 비밀번호 해싱
+UserSchema.pre("save", async function(next) {
+  if (!this.isModified("passwd")) return next()
+  try {
+    const salt = await bcrypt.genSalt(10)
+    this.passwd = await bcrypt.hash(this.passwd, salt)
+    next()
+  } catch (error) {
+    next(error)
+  }
+})
 
-const User = mongoose.model("User", UserSchema)
-
-module.exports = User
+module.exports = mongoose.model("User", UserSchema)
