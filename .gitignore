@@ -44,4 +44,4 @@ backend/config/database.js
 /.vscode
 package-lock.json
 package.json
-mongo.js
+*.mongodb.js
