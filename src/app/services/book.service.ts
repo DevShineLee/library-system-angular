@@ -13,4 +13,8 @@ export class BookService {
   getBooks(): Observable<any[]> {
     return this.http.get<any[]>(this.apiUrl);
   }
+
+  getBookById(bookID: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/${bookID}`);
+  }
 }

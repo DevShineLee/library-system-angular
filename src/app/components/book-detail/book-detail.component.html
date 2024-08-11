@@ -1,0 +1,15 @@
+<div class="container mt-5">
+  <h1>Book Detail</h1>
+  <div *ngIf="book; else noBookFound">
+    <h2>{{ book.title }}</h2>
+    <p><strong>Author:</strong> {{ book.author }}</p>
+    <p><strong>Genre:</strong> {{ book.genre }}</p>
+    <p><strong>ISBN:</strong> {{ book.ISBN }}</p>
+    <p><strong>ID:</strong> {{ book.bookID }}</p>
+    <p *ngIf="book.isBorrowed"><strong>Status:</strong> Borrowed</p>
+    <p *ngIf="!book.isBorrowed"><strong>Status:</strong> Available</p>
+  </div>
+  <ng-template #noBookFound>
+    <p>No book details available.</p>
+  </ng-template>
+</div>
