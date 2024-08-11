@@ -43,8 +43,8 @@ export class CreateUserComponent implements OnInit {
       this.userService.createUser(this.signupForm.value).subscribe({
         next: (response) => {
           console.log('User registered', response)
-          alert('Welcome!') // Alert for successful registration //TODO 안됨
-          this.location.back() // Alternative to navigate for redirection //TODO 안됨
+          alert('Welcome!') // Alert for successful registration
+          this.router.navigate(['/login']) // Alternative to navigate for redirection
         },
         error: (error) => {
           console.error('Registration failed', error)
