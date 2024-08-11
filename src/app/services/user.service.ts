@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError, BehaviorSubject } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 interface LoginResponse {
   message: string;
@@ -13,7 +14,9 @@ interface LoginResponse {
 })
 export class UserService {
   private apiUrl = 'http://localhost:3000/api/users';
-  private loggedInStatus = new BehaviorSubject<boolean>(false);
+  private loggedInStatus = new BehaviorSubject<boolean>(
+    this.checkTokenExistence()
+  );
   isLoggedIn$ = this.loggedInStatus.asObservable(); // Components subscribe to this
 
   httpOptions = {
@@ -23,7 +26,23 @@ export class UserService {
     }),
   };
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {
+    // On every route change, check the token and update the loggedInStatus
+    this.router.events.subscribe(() => {
+      this.updateLoggedInStatus();
+    });
+  }
+
+  private checkTokenExistence(): boolean {
+    return !!sessionStorage.getItem('token');
+  }
+
+  private updateLoggedInStatus() {
+    const isLoggedIn = this.checkTokenExistence();
+    if (this.loggedInStatus.value !== isLoggedIn) {
+      this.loggedInStatus.next(isLoggedIn);
+    }
+  }
 
   createUser(userData: any): Observable<any> {
     console.log('Sending user data to server:', userData);
@@ -47,23 +66,25 @@ export class UserService {
         tap((response) => {
           if (response.token) {
             sessionStorage.setItem('token', response.token); // Store the token
-            this.loggedInStatus.next(true); // Update the loggedInStatus
+            this.updateLoggedInStatus(); // Update the loggedInStatus
           } else {
             console.warn('Token not provided in the response');
-            this.loggedInStatus.next(false); // Ensure loggedInStatus is accurate
+            this.updateLoggedInStatus(); // Ensure loggedInStatus is accurate
           }
           console.log('Login successful:', response);
         }),
         catchError((error) => {
           console.error('Error during login:', error);
-          this.loggedInStatus.next(false); // Update status on error as well
+          this.updateLoggedInStatus(); // Update status on error as well
           return throwError(() => new Error('Login failed'));
         })
       );
   }
 
-  logout(): void {
-    sessionStorage.removeItem('token'); // Clear the token from storage
-    this.loggedInStatus.next(false); // Update the loggedInStatus
+  logout() {
+    sessionStorage.clear();
+    this.updateLoggedInStatus();
+    alert('Bye, See you!');
+    this.router.navigate(['/']);
   }
 }
