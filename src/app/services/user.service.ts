@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 interface LoginResponse {
   message: string;
   token: string; // This assumes the backend sends a token in the login response
+  username: string;
 }
 
 @Injectable({
@@ -26,12 +27,7 @@ export class UserService {
     }),
   };
 
-  constructor(private http: HttpClient, private router: Router) {
-    // On every route change, check the token and update the loggedInStatus
-    this.router.events.subscribe(() => {
-      this.updateLoggedInStatus();
-    });
-  }
+  constructor(private http: HttpClient, private router: Router) {}
 
   private checkTokenExistence(): boolean {
     return !!sessionStorage.getItem('token');
@@ -64,23 +60,28 @@ export class UserService {
       .post<LoginResponse>(`${this.apiUrl}/login`, userData, this.httpOptions)
       .pipe(
         tap((response) => {
-          if (response.token) {
-            sessionStorage.setItem('token', response.token); // Store the token
-            this.updateLoggedInStatus(); // Update the loggedInStatus
+          if (response.token && response.username) {
+            // Check both token and username
+            sessionStorage.setItem('token', response.token);
+            sessionStorage.setItem('username', response.username);
+            this.loggedInStatus.next(true);
           } else {
-            console.warn('Token not provided in the response');
-            this.updateLoggedInStatus(); // Ensure loggedInStatus is accurate
+            console.error(
+              'Login response missing token or username:',
+              response
+            );
+            this.loggedInStatus.next(false);
           }
-          console.log('Login successful:', response);
         }),
         catchError((error) => {
           console.error('Error during login:', error);
-          this.updateLoggedInStatus(); // Update status on error as well
+          this.loggedInStatus.next(false);
           return throwError(() => new Error('Login failed'));
         })
       );
   }
 
+  
   logout() {
     sessionStorage.clear();
     this.updateLoggedInStatus();

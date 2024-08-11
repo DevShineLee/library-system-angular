@@ -32,23 +32,40 @@ router.post("/", async (req, res) => {
 router.post("/login", async (req, res) => {
   try {
     const { username, password } = req.body
+    console.log("Attempting login for:", username) // Debug: log the username attempt
+
     const user = await User.findOne({ username })
     if (!user) {
+      console.log("User not found:", username) // Debug: log when user is not found
       return res.status(404).json({ message: "User not found" })
     }
+
     const isMatch = await bcrypt.compare(password, user.password)
     if (!isMatch) {
+      console.log("Invalid credentials for:", username) // Debug: log failed password match
       return res.status(401).json({ message: "Invalid credentials" })
     }
 
     // Generate token
-    const token = jwt.sign({ id: user._id }, secretKey, {
-      expiresIn: "1h"
-    }) // Adjust secret and options as needed
+    const token = jwt.sign(
+      { id: user._id, username: user.username },
+      secretKey,
+      {
+        expiresIn: "1h"
+      }
+    )
 
-    res.json({ message: "Login successful", token: token })
+    // Debug: log the complete response object
+    const loginResponse = {
+      message: "Login successful",
+      token: token,
+      username: user.username
+    }
+    console.log("Login response:", loginResponse)
+
+    res.json(loginResponse)
   } catch (error) {
-    console.error("Login error:", error)
+    console.error("Login error for user:", username, error) // Debug: log errors more comprehensively
     res.status(500).json({ message: "Server error" })
   }
 })

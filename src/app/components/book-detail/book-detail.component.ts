@@ -14,12 +14,11 @@ import { CommonModule } from '@angular/common';
 })
 export class BookDetailComponent implements OnInit {
   book: any;
-  sessionUserID = sessionStorage.getItem('userID'); // Assuming userID is stored in session storage
+  currentUsername: string | null;
 
-  constructor(
-    private route: ActivatedRoute,
-    private bookService: BookService
-  ) {}
+  constructor(private route: ActivatedRoute, private bookService: BookService) {
+    this.currentUsername = sessionStorage.getItem('username'); // Retrieve current username from session storage
+  }
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
@@ -36,12 +35,16 @@ export class BookDetailComponent implements OnInit {
   }
 
   borrowBook(bookID: number): void {
-    // Implement borrow book functionality
     console.log('Borrowing book:', bookID);
+    // Implement the actual borrowing logic here, possibly involving a service call
   }
 
   returnBook(bookID: number): void {
-    // Implement return book functionality
     console.log('Returning book:', bookID);
+    // Implement the actual return logic here, possibly involving a service call
+  }
+
+  canReturn(): boolean {
+    return this.book.isBorrowed && this.book.userID === this.currentUsername;
   }
 }
