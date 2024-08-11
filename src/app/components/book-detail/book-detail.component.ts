@@ -1,7 +1,8 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BookService } from '../../services/book.service';
-import { catchError, of, Subject, takeUntil } from 'rxjs';
+import { catchError, of } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -11,9 +12,9 @@ import { CommonModule } from '@angular/common';
   templateUrl: './book-detail.component.html',
   styleUrls: ['./book-detail.component.css'],
 })
-export class BookDetailComponent implements OnInit, OnDestroy {
-  private destroy$ = new Subject<void>();
+export class BookDetailComponent implements OnInit {
   book: any;
+  sessionUserID = sessionStorage.getItem('userID'); // Assuming userID is stored in session storage
 
   constructor(
     private route: ActivatedRoute,
@@ -21,29 +22,26 @@ export class BookDetailComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
+    this.route.params.subscribe((params) => {
       const bookId = params['id'];
-      this.bookService
-        .getBookById(bookId)
-        .pipe(
-          catchError((error) => {
-            console.error('Failed to fetch book details', error);
-            return of(null); // Handle error by returning a null value
-          }),
-          takeUntil(this.destroy$)
-        )
-        .subscribe((book) => {
-          if (book) {
-            this.book = book;
-          } else {
-            console.warn('No book found with this ID');
-          }
-        });
+      this.bookService.getBookById(bookId).subscribe(
+        (book) => {
+          this.book = book;
+        },
+        (error) => {
+          console.error('Failed to fetch book details', error);
+        }
+      );
     });
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+  borrowBook(bookID: number): void {
+    // Implement borrow book functionality
+    console.log('Borrowing book:', bookID);
+  }
+
+  returnBook(bookID: number): void {
+    // Implement return book functionality
+    console.log('Returning book:', bookID);
   }
 }

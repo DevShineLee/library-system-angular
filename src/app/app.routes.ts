@@ -4,12 +4,20 @@ import { CreateUserComponent } from './components/create-user/create-user.compon
 import { LoginComponent } from './components/login/login.component'
 import { BookListComponent } from './components/book-list/book-list.component'
 import { BookDetailComponent } from './components/book-detail/book-detail.component'; // Import BookDetailComponent
+import { MyPageComponent } from './components/my-page/my-page.component';
 
 
 export const routes: Routes = [
-  { path: 'home', component: HomeComponent },
+  {
+    path: '',
+    component: HomeComponent,
+    children: [
+      { path: 'home', component: HomeComponent },
+    ],
+  },
   { path: 'book-list', component: BookListComponent },
   { path: 'create-user', component: CreateUserComponent },
   { path: 'login', component: LoginComponent },
   { path: 'books/:id', component: BookDetailComponent },
+  { path: 'my-page', component: MyPageComponent },
 ];
