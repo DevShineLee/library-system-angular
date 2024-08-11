@@ -7,7 +7,7 @@ const UserSchema = new mongoose.Schema({
   password: { type: String, required: true }
 })
 
-// 비밀번호 해싱
+// password hashing
 UserSchema.pre("save", async function(next) {
   if (!this.isModified("passwd")) return next()
   try {
