@@ -12,8 +12,8 @@ app.use(cors())
 app.use(express.json())
 
 // use routes
-app.use("/api/books", bookRoutes) // 책 라우트
-app.use("/api/users", userRoutes) // 사용자 라우트
+app.use("/api/books", bookRoutes) // book route
+app.use("/api/users", userRoutes) // user route
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
