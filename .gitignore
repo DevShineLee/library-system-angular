@@ -45,3 +45,4 @@ backend/config/database.js
 package-lock.json
 package.json
 *.mongodb.js
+todo.txt
