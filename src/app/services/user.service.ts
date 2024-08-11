@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { Observable, throwError, BehaviorSubject } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 
 interface LoginResponse {
   message: string;
-  token: string; // Ensure that the response includes a token property
+  token: string; // This assumes the backend sends a token in the login response
 }
 
 @Injectable({
@@ -13,6 +13,8 @@ interface LoginResponse {
 })
 export class UserService {
   private apiUrl = 'http://localhost:3000/api/users';
+  private loggedInStatus = new BehaviorSubject<boolean>(false);
+  isLoggedIn$ = this.loggedInStatus.asObservable(); // Components subscribe to this
 
   httpOptions = {
     headers: new HttpHeaders({
@@ -38,27 +40,30 @@ export class UserService {
       );
   }
 
-  // Correcting the URL in UserService if needed
-
   login(userData: any): Observable<LoginResponse> {
     return this.http
-      .post<LoginResponse>(`${this.apiUrl}/login`, userData, {
-        headers: new HttpHeaders({
-          'Content-Type': 'application/json',
-        }),
-      })
+      .post<LoginResponse>(`${this.apiUrl}/login`, userData, this.httpOptions)
       .pipe(
-        tap((response: LoginResponse) => {
+        tap((response) => {
           if (response.token) {
-            sessionStorage.setItem('token', response.token);
+            sessionStorage.setItem('token', response.token); // Store the token
+            this.loggedInStatus.next(true); // Update the loggedInStatus
           } else {
             console.warn('Token not provided in the response');
+            this.loggedInStatus.next(false); // Ensure loggedInStatus is accurate
           }
+          console.log('Login successful:', response);
         }),
         catchError((error) => {
           console.error('Error during login:', error);
+          this.loggedInStatus.next(false); // Update status on error as well
           return throwError(() => new Error('Login failed'));
         })
       );
+  }
+
+  logout(): void {
+    sessionStorage.removeItem('token'); // Clear the token from storage
+    this.loggedInStatus.next(false); // Update the loggedInStatus
   }
 }

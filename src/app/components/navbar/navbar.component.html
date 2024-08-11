@@ -25,17 +25,17 @@
           </ul>
         </li>
         <li class="nav-item">
-          <a class="nav-link" id="myPageButton" href="/myPage" style="display:none;">My Page</a>
+          <a class="nav-link" id="myPageButton" *ngIf="isLoggedIn" href="/myPage">My Page</a>
         </li>
       </ul>
       <form class="d-flex ms-auto" id="searchForm">
         <input class="form-control me-2" type="search" id="searchInput" placeholder="Search books" aria-label="Search">
         <button class="btn btn-outline-success" type="submit">Search</button>
       </form>
-      <button class="btn btn-outline-primary ms-3" id="loginButton"><a class="nav-link active" aria-current="page" href="login">Login</a></button>
-      <button class="btn btn-outline-secondary ms-2" id="signupButton" data-bs-toggle="modal"
-        data-bs-target="#signupModal"><a class="nav-link active" aria-current="page" href="create-user">Sign Up</a></button>
-      <button class="btn btn-outline-danger ms-2" id="logoutButton" style="display:none;">Logout</button>
-    </div>
+<button class="btn btn-outline-primary ms-3" *ngIf="!isLoggedIn"><a class="nav-link" href="login">Login</a></button>
+<button class="btn btn-outline-secondary ms-2" *ngIf="!isLoggedIn" data-bs-toggle="modal"
+  data-bs-target="#signupModal"><a class="nav-link" href="create-user">Sign Up</a></button>
+<button class="btn btn-outline-danger ms-2" *ngIf="isLoggedIn" (click)="logout()">Logout</button>
+</div>
   </div>
 </nav>
