@@ -1,6 +1,8 @@
+// backend/server.js
+
 const express = require("express")
-const mongoose = require("./config/database") // Adjust this path if needed
-const bookRoutes = require("./routes/booksRoutes") // Ensure this matches the actual file name
+const mongoose = require("./config/database")
+const bookRoutes = require("./routes/booksRoutes")
 const userRoutes = require("./routes/userRoutes")
 const cors = require("cors")
 const app = express()
@@ -9,8 +11,8 @@ const PORT = process.env.PORT || 3000
 app.use(cors())
 app.use(express.json())
 
-app.use("/api/books", bookRoutes) // Correct route setup for books
-app.use("/api/users", userRoutes) // Route setup for users
+app.use("/api/books", bookRoutes) // Book routes
+app.use("/api/users", userRoutes) // User routes
 
 // General error handler for unmatched routes
 app.use((req, res, next) => {

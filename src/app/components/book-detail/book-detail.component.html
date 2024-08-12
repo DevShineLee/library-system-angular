@@ -10,11 +10,11 @@
     <p *ngIf="!book.isBorrowed"><strong>Status:</strong> Available</p>
   </div>
 
-  <!-- Borrow button (only if the book is not borrowed) -->
-  <button *ngIf="!book.isBorrowed" (click)="borrowBook(book.bookID)" class="btn btn-success">Borrow</button>
+<!-- Add safe navigation operator to avoid errors if book is undefined -->
+<button *ngIf="book?.isBorrowed && book?.userID === currentUsername" (click)="returnBook(book.bookID)"
+  class="btn btn-warning">Return</button>
+<button *ngIf="!book?.isBorrowed" (click)="borrowBook(book.bookID)" class="btn btn-success">Borrow</button>
 
-  <!-- Return button (only if the book is borrowed by this user) -->
-  <button *ngIf="book.isBorrowed && book.userID === currentUsername" (click)="returnBook(book.bookID)" class="btn btn-warning">Return</button>
 
   <ng-template #noBookFound>
     <p>No book details available.</p>
