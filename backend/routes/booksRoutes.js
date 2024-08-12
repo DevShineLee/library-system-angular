@@ -84,4 +84,27 @@ router.put("/return/:bookID", async (req, res) => {
 });
 
 
+router.post("/add", async (req, res) => {
+  try {
+    const { bookID, ISBN, title, genre, author } = req.body
+    // 새 책 객체 생성
+    const newBook = new Book({
+      bookID,
+      ISBN,
+      title,
+      genre,
+      author
+    })
+    // DB에 새 책 저장
+    await newBook.save()
+    res.status(201).json(newBook)
+  } catch (error) {
+    console.error("Error adding new book:", error)
+    res
+      .status(500)
+      .json({ message: "Failed to add new book", error: error.message })
+  }
+})
+
+
 module.exports = router

@@ -40,4 +40,7 @@ export class BookService {
     );
   }
 
+  addBook(bookData: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/add`, bookData, this.httpOptions);
+  }
 }
