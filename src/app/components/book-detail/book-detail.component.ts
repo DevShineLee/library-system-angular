@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BookService } from '../../services/book.service';
 import { catchError, of } from 'rxjs';
 import { tap } from 'rxjs/operators';
@@ -16,9 +16,14 @@ export class BookDetailComponent implements OnInit {
   book: any = null; // Initialize book to null to handle undefined scenarios
   currentUsername: string | null;
 
-  constructor(private route: ActivatedRoute, private bookService: BookService) {
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private bookService: BookService
+  ) {
     this.currentUsername = sessionStorage.getItem('username'); // Retrieve current username from session storage
   }
+  isLoggedIn: boolean = false; // 로그인 상태 플래그
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
@@ -33,6 +38,12 @@ export class BookDetailComponent implements OnInit {
         }
       );
     });
+    this.checkLoginStatus();
+  }
+
+  checkLoginStatus() {
+    // sessionStorage에서 token을 확인
+    this.isLoggedIn = !!sessionStorage.getItem('token');
   }
 
   canReturn(): boolean {
@@ -44,7 +55,7 @@ export class BookDetailComponent implements OnInit {
     );
   }
 
- borrowBook(bookID: number): void {
+  borrowBook(bookID: number): void {
     if (this.currentUsername) {
       this.bookService.borrowBook(bookID, this.currentUsername).subscribe({
         next: (book) => {
@@ -54,7 +65,7 @@ export class BookDetailComponent implements OnInit {
         error: (error) => {
           alert('Failed to borrow book: ' + error.message);
           console.error(error);
-        }
+        },
       });
     }
   }
@@ -69,9 +80,12 @@ export class BookDetailComponent implements OnInit {
         error: (error) => {
           alert('Failed to return book: ' + error.message);
           console.error(error);
-        }
+        },
       });
     }
   }
 
+  editBook(bookID: number): void {
+    this.router.navigate(['/edit-book', bookID]);
+  }
 }

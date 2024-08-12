@@ -1,0 +1,28 @@
+<!-- edit-book.component.html -->
+<div class="container">
+  <h1>Edit Book</h1>
+  <form [formGroup]="editBookForm" (ngSubmit)="updateBook()">
+    <div class="form-group">
+      <label for="bookID">Book ID</label>
+      <input type="text" id="bookID" class="form-control" formControlName="bookID" readonly>
+    </div>
+    <div class="form-group">
+      <label for="genre">Genre</label>
+      <input type="text" id="genre" class="form-control" formControlName="genre">
+    </div>
+    <div class="form-group">
+      <label for="title">Title</label>
+      <input type="text" id="title" class="form-control" formControlName="title">
+    </div>
+    <div class="form-group">
+      <label for="author">Author</label>
+      <input type="text" id="author" class="form-control" formControlName="author">
+    </div>
+    <div class="form-group">
+      <label for="ISBN">ISBN</label>
+      <input type="text" id="ISBN" class="form-control" formControlName="ISBN">
+    </div>
+    <button type="submit" class="btn btn-primary me-2 mt-4">Update Book</button>
+    <button type="button" class="btn btn-danger me-2 mt-4" (click)="deleteBook()">Delete Book</button>
+  </form>
+</div>

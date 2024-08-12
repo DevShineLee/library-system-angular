@@ -43,4 +43,20 @@ export class BookService {
   addBook(bookData: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/add`, bookData, this.httpOptions);
   }
+
+  updateBook(bookID: number, bookData: any): Observable<any> {
+    return this.http.put(
+      `${this.apiUrl}/edit/${bookID}`,
+      bookData,
+      this.httpOptions
+    );
+  }
+
+  // Angular Service
+  deleteBook(bookID: number): Observable<any> {
+    return this.http.delete(
+      `${this.apiUrl}/delete/${bookID}`,
+      this.httpOptions
+    );
+  }
 }

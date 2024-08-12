@@ -107,4 +107,45 @@ router.post("/add", async (req, res) => {
 })
 
 
+// Node.js Express Server
+
+// PUT route to update a book
+router.put("/edit/:bookID", async (req, res) => {
+  const bookID = parseInt(req.params.bookID);
+  if (isNaN(bookID)) {
+    return res.status(400).send("Invalid book ID format.");
+  }
+  try {
+    const updateData = req.body;
+    const updatedBook = await Book.findOneAndUpdate({ bookID: bookID }, updateData, { new: true });
+    if (!updatedBook) {
+      return res.status(404).send("Book not found");
+    }
+    res.json(updatedBook);
+  } catch (error) {
+    console.error("Failed to update book:", error);
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// DELETE route to delete a book
+router.delete("/delete/:bookID", async (req, res) => {
+  const bookID = parseInt(req.params.bookID);
+  if (isNaN(bookID)) {
+    return res.status(400).send("Invalid book ID format.");
+  }
+  try {
+    const deletedBook = await Book.findOneAndDelete({ bookID: bookID });
+    if (!deletedBook) {
+      return res.status(404).send("Book not found");
+    }
+    res.status(200).json({ message: "Book deleted successfully", bookID: bookID });
+  } catch (error) {
+    console.error("Failed to delete book:", error);
+    res.status(500).json({ message: error.message });
+  }
+});
+
+
+
 module.exports = router

@@ -12,9 +12,9 @@
 
 <!-- Add safe navigation operator to avoid errors if book is undefined -->
 <button *ngIf="book?.isBorrowed && book?.userID === currentUsername" (click)="returnBook(book.bookID)"
-  class="btn btn-warning">Return</button>
-<button *ngIf="!book?.isBorrowed" (click)="borrowBook(book.bookID)" class="btn btn-success">Borrow</button>
-
+  class="btn btn-warning me-2">Return</button>
+<button *ngIf="!book?.isBorrowed && isLoggedIn" (click)="borrowBook(book.bookID)" class="btn btn-success me-2">Borrow</button>
+<button *ngIf="isLoggedIn" (click)="editBook(book.bookID)" class="btn btn-info me-2">Edit</button>
 
   <ng-template #noBookFound>
     <p>No book details available.</p>
