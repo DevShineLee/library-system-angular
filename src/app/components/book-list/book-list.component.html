@@ -1,7 +1,7 @@
 <div class="container mt-5">
   <h1>Library Books</h1>
 
-  <!-- 로그인 상태일 때만 보이는 새 책 추가 폼 -->
+  <!-- add book form only display if login user exists -->
   <div *ngIf="isLoggedIn" class="mb-3">
     <h2>Add New Book</h2>
     <form [formGroup]="newBookForm" (ngSubmit)="addBook()">
@@ -40,16 +40,17 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let book of books">
+      <tr *ngFor="let book of filteredBooks">
         <td>{{ book.bookID }}</td>
         <td>{{ book.genre }}</td>
         <td><a [routerLink]="['/books', book.bookID]">{{ book.title }}</a></td>
         <td>{{ book.author }}</td>
         <td>{{ book.ISBN }}</td>
       </tr>
-      <tr *ngIf="books.length === 0">
+      <tr *ngIf="filteredBooks.length === 0">
         <td colspan="5" class="text-center">No results found</td>
       </tr>
     </tbody>
+
   </table>
 </div>

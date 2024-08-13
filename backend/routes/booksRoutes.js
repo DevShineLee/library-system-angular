@@ -2,24 +2,45 @@ const express = require("express")
 const router = express.Router()
 const Book = require("../models/book.model")
 
-// get all books
-// http://localhost:3000/api/books
+// get all book with search option
 router.get("/", async (req, res) => {
   try {
-    const books = await Book.find()
+    const searchQuery = req.query.search
+    let query = Book.find()
+
+    if (searchQuery) {
+      const regex = new RegExp(escapeRegex(searchQuery), "i")
+      query = query.where({
+        $or: [
+          { title: regex },
+          { author: regex },
+          { genre: regex },
+          { ISBN: regex }
+        ]
+      })
+    }
+
+    const books = await query.exec()
     res.json(books)
   } catch (error) {
-    res.status(500).json({ message: error.message })
+    console.error("Error fetching books:", error)
+    res
+      .status(500)
+      .json({ message: "Internal Server Error", error: error.message })
   }
 })
+
+function escapeRegex(text) {
+  return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&")
+}
 
 // Fetch a book by its bookID
 router.get("/:bookID", async (req, res) => {
   console.log("Attempting to fetch book with ID:", req.params.bookID);
   try {
-    const id = parseInt(req.params.bookID, 10); // Convert bookID from string to number
+    const id = parseInt(req.params.bookID, 10);
     if (isNaN(id)) {
-      return res.status(400).send("Invalid book ID"); // Send an error if conversion fails
+      return res.status(400).send("Invalid book ID: must be a number");
     }
     const book = await Book.findOne({ bookID: id });
     if (!book) {
@@ -31,6 +52,7 @@ router.get("/:bookID", async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+
 
 
 // PUT route to borrow a book
@@ -64,7 +86,7 @@ router.put("/borrow/:bookID", async (req, res) => {
 
 // PUT route to return a book
 router.put("/return/:bookID", async (req, res) => {
-  console.log("PUT /api/books/return/:bookID", req.params.bookID); // 로그 추가
+  console.log("PUT /api/books/return/:bookID", req.params.bookID);
     console.log("Request body:", req.body)
   try {
     const bookID = parseInt(req.params.bookID, 10);
@@ -87,7 +109,7 @@ router.put("/return/:bookID", async (req, res) => {
 router.post("/add", async (req, res) => {
   try {
     const { bookID, ISBN, title, genre, author } = req.body
-    // 새 책 객체 생성
+    // create new book object
     const newBook = new Book({
       bookID,
       ISBN,
@@ -95,7 +117,7 @@ router.post("/add", async (req, res) => {
       genre,
       author
     })
-    // DB에 새 책 저장
+    // store new book
     await newBook.save()
     res.status(201).json(newBook)
   } catch (error) {
@@ -106,8 +128,6 @@ router.post("/add", async (req, res) => {
   }
 })
 
-
-// Node.js Express Server
 
 // PUT route to update a book
 router.put("/edit/:bookID", async (req, res) => {
@@ -145,7 +165,5 @@ router.delete("/delete/:bookID", async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
-
-
 
 module.exports = router

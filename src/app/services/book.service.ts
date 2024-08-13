@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { Observable, BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -8,7 +8,9 @@ import { Observable } from 'rxjs';
 export class BookService {
   private apiUrl = 'http://localhost:3000/api/books';
 
-  // HttpHeaders 객체를 정의하여 모든 HTTP 요청에 사용할 수 있도록 설정
+  private searchQuerySource = new BehaviorSubject<string>('');
+  searchQuery$ = this.searchQuerySource.asObservable();
+
   private httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
@@ -16,8 +18,12 @@ export class BookService {
   };
   constructor(private http: HttpClient) {}
 
-  getBooks(): Observable<any[]> {
-    return this.http.get<any[]>(this.apiUrl);
+  getBooks(query: string = ''): Observable<any[]> {
+    let params = new HttpParams();
+    if (query) {
+      params = params.append('search', query);
+    }
+    return this.http.get<any[]>(`${this.apiUrl}`, { params });
   }
 
   getBookById(bookID: number): Observable<any> {
@@ -58,5 +64,10 @@ export class BookService {
       `${this.apiUrl}/delete/${bookID}`,
       this.httpOptions
     );
+  }
+
+  setSearchQuery(query: string): void {
+    console.log('Setting search query:', query); // This should log the search query
+    this.searchQuerySource.next(query);
   }
 }

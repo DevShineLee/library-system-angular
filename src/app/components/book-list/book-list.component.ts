@@ -5,6 +5,8 @@ import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { catchError, of } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
+import { ChangeDetectorRef } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-book-list',
@@ -16,6 +18,7 @@ import { CommonModule } from '@angular/common';
 })
 export class BookListComponent implements OnInit {
   books: any[] = [];
+  filteredBooks: any[] = [];
   newBookForm = new FormGroup({
     bookID: new FormControl(''),
     ISBN: new FormControl(''),
@@ -23,24 +26,40 @@ export class BookListComponent implements OnInit {
     genre: new FormControl(''),
     author: new FormControl(''),
   });
-  isLoggedIn: boolean = false; // 로그인 상태 플래그
+  isLoggedIn: boolean = false; // login status flag
 
-  constructor(private bookService: BookService) {}
+  constructor(
+    private bookService: BookService,
+    private cd: ChangeDetectorRef,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit() {
-    this.bookService.getBooks().subscribe({
-      next: (books) => (this.books = books),
+    this.route.queryParams.subscribe((params) => {
+      const search = params['search'];
+      this.loadBooks(search);
+    });
+    this.checkLoginStatus();
+    console.log('Subscribing to search queries...');
+  }
+
+  loadBooks(search?: string) {
+    this.bookService.getBooks(search).subscribe({
+      next: (books) => {
+        this.books = this.filteredBooks = books;
+        this.cd.markForCheck(); // Manually trigger change detection
+      },
       error: (error) => {
         console.error('Failed to fetch books', error);
         this.books = [];
+        this.filteredBooks = [];
+        this.cd.markForCheck();
       },
     });
-
-    this.checkLoginStatus();
   }
 
   checkLoginStatus() {
-    // sessionStorage에서 token을 확인
+    // check token from sessionStorage
     this.isLoggedIn = !!sessionStorage.getItem('token');
   }
 
@@ -49,6 +68,7 @@ export class BookListComponent implements OnInit {
       this.bookService.addBook(this.newBookForm.value).subscribe({
         next: (book) => {
           this.books.push(book);
+          this.filteredBooks.push(book);
           alert('Book added successfully');
           this.newBookForm.reset();
         },
@@ -61,4 +81,5 @@ export class BookListComponent implements OnInit {
       alert('You must be logged in to add a book.');
     }
   }
+
 }

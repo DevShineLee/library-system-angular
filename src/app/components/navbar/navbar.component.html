@@ -28,10 +28,13 @@
           <a class="nav-link" id="myPageButton" href="/my-page">My Page</a>
         </li> -->
       </ul>
-      <form class="d-flex ms-auto" id="searchForm">
-        <input class="form-control me-2" type="search" id="searchInput" placeholder="Search books" aria-label="Search">
+      <form [formGroup]="searchForm" class="d-flex ms-auto" (ngSubmit)="onSearch($event)">
+        <input class="form-control me-2" type="search" id="searchInput" placeholder="Search books" aria-label="Search"
+          formControlName="searchQuery">
         <button class="btn btn-outline-success" type="submit">Search</button>
       </form>
+
+
       <button class="btn btn-outline-primary ms-3" *ngIf="!isLoggedIn"><a class="nav-link"
           href="login">Login</a></button>
       <button class="btn btn-outline-secondary ms-2" *ngIf="!isLoggedIn" data-bs-toggle="modal"
