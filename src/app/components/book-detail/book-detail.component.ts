@@ -23,7 +23,7 @@ export class BookDetailComponent implements OnInit {
   ) {
     this.currentUsername = sessionStorage.getItem('username'); // Retrieve current username from session storage
   }
-  isLoggedIn: boolean = false; // 로그인 상태 플래그
+  isLoggedIn: boolean = false;
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
@@ -42,7 +42,6 @@ export class BookDetailComponent implements OnInit {
   }
 
   checkLoginStatus() {
-    // sessionStorage에서 token을 확인
     this.isLoggedIn = !!sessionStorage.getItem('token');
   }
 
@@ -59,7 +58,7 @@ export class BookDetailComponent implements OnInit {
     if (this.currentUsername) {
       this.bookService.borrowBook(bookID, this.currentUsername).subscribe({
         next: (book) => {
-          this.book = book; // 바로 여기에 책 정보를 업데이트
+          this.book = book; // update UI right after update book
           alert('Book borrowed successfully');
         },
         error: (error) => {
@@ -74,7 +73,7 @@ export class BookDetailComponent implements OnInit {
     if (this.book.userID) {
       this.bookService.returnBook(bookID, this.book.userID).subscribe({
         next: (book) => {
-          this.book = book; // 바로 여기에 책 정보를 업데이트
+          this.book = book; // update UI right after update book
           alert('Book returned successfully');
         },
         error: (error) => {

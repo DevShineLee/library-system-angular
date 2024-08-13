@@ -81,7 +81,6 @@ export class UserService {
       );
   }
 
-  
   logout() {
     sessionStorage.clear();
     this.updateLoggedInStatus();

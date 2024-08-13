@@ -3,7 +3,7 @@ import { HomeComponent } from './components/home/home.component'
 import { CreateUserComponent } from './components/create-user/create-user.component'
 import { LoginComponent } from './components/login/login.component'
 import { BookListComponent } from './components/book-list/book-list.component'
-import { BookDetailComponent } from './components/book-detail/book-detail.component'; // Import BookDetailComponent
+import { BookDetailComponent } from './components/book-detail/book-detail.component';
 // import { MyPageComponent } from './components/my-page/my-page.component';
 import { EditBookComponent } from './components/edit-book/edit-book.component';
 

@@ -53,8 +53,6 @@ router.get("/:bookID", async (req, res) => {
   }
 });
 
-
-
 // PUT route to borrow a book
 router.put("/borrow/:bookID", async (req, res) => {
   console.log("Borrow request received for bookID:", req.params.bookID)
@@ -83,7 +81,6 @@ router.put("/borrow/:bookID", async (req, res) => {
   }
 });
 
-
 // PUT route to return a book
 router.put("/return/:bookID", async (req, res) => {
   console.log("PUT /api/books/return/:bookID", req.params.bookID);
@@ -104,7 +101,6 @@ router.put("/return/:bookID", async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
-
 
 router.post("/add", async (req, res) => {
   try {
@@ -127,7 +123,6 @@ router.post("/add", async (req, res) => {
       .json({ message: "Failed to add new book", error: error.message })
   }
 })
-
 
 // PUT route to update a book
 router.put("/edit/:bookID", async (req, res) => {

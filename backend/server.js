@@ -1,5 +1,3 @@
-// backend/server.js
-
 const express = require("express")
 const mongoose = require("./config/database")
 const bookRoutes = require("./routes/booksRoutes")
