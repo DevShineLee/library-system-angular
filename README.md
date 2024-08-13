@@ -2,24 +2,26 @@
 
 ## Overview
 
-Welcome to the Library System project, a comprehensive backend solution designed to manage a library's operations efficiently. This system leverages modern web technologies to provide a robust interface for managing books, users, and their interactions with the library.
+Welcome to the Library System project, a comprehensive backend solution with an Angular 18-based interface designed to manage a library's operations efficiently. This project leverages modern web technologies to provide a robust platform for managing books, users, and their interactions within the library.
 
-Built using Node.js and Express, this system supports functionalities such as user registration and authentication, book management (including additions, updates, deletions), and the ability to borrow and return books. The MongoDB database is used for storing all data securely and efficiently, ensuring that user and book information is easily accessible and manageable.
+Built using Node.js and Express on the backend and Angular 18 for the frontend, this system supports functionalities such as user registration and authentication, book management (including additions, updates, deletions), and the ability to borrow and return books. The MongoDB database is used for storing all data securely and efficiently, ensuring that user and book information is easily accessible and manageable.
 
-The system also includes detailed API endpoints that allow clients to interact with the library's database seamlessly. These endpoints are well-documented in this README to help developers understand and integrate the library's functionalities into any frontend system effectively.
+The system includes detailed API endpoints that allow clients to interact seamlessly with the library's database. These endpoints are well-documented in this README to help developers understand and integrate the library's functionalities into any frontend system effectively. Bootstrap 5.3.3 is utilized to style the frontend, ensuring that the user interface is responsive and visually appealing.
 
-Whether you are developing a full-fledged library management system or integrating with existing software, this project provides the necessary backend APIs to meet your needs. Detailed below are the setup instructions, npm module requirements, API endpoint descriptions, and example curl commands for testing the functionality of the system.
+Whether you are developing a full-fledged library management system or integrating with existing software, this project provides the necessary backend APIs and a frontend framework to meet your needs. Detailed below are the setup instructions, npm module requirements, API endpoint descriptions, and example curl commands for testing the functionality of the system.
+
 
 ## Project Setup
 
 ### Required npm Modules:
-- `express`: Server operations
-- `mongoose`: MongoDB database management
-- `bcrypt`: Password hashing
-- `jsonwebtoken` (JWT): Handling authentication tokens
-- `body-parser` (now included in Express): Parsing incoming request bodies
-- `cors`: Enabling cross-origin resource sharing in APIs
-- `curl`: Testing APIs by making HTTP requests from the command line
+- `express`: for server operations
+- `mongoose`: for MongoDB database management
+- `bcrypt`: for password hashing
+- `jsonwebtoken` (JWT): for handling authentication tokens
+- `body-parser` (now included in Express): for parsing incoming request bodies
+- `cors`: for enabling cross-origin resource sharing in APIs
+- `bootstrap`: for responsive styling of the frontend (v.5.3.3)
+- `curl`: for testing APIs by making HTTP requests from the command line
 
 ## API Endpoints
 
