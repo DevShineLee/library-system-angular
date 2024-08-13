@@ -18,10 +18,13 @@ export class BookService {
   };
   constructor(private http: HttpClient) {}
 
-  getBooks(query: string = ''): Observable<any[]> {
+  getBooks(search: string = '', genre: string = ''): Observable<any[]> {
     let params = new HttpParams();
-    if (query) {
-      params = params.append('search', query);
+    if (search) {
+      params = params.append('search', search);
+    }
+    if (genre) {
+      params = params.append('genre', genre);
     }
     return this.http.get<any[]>(`${this.apiUrl}`, { params });
   }

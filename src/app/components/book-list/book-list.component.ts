@@ -36,15 +36,15 @@ export class BookListComponent implements OnInit {
 
   ngOnInit() {
     this.route.queryParams.subscribe((params) => {
+      const genre = params['genre'];
       const search = params['search'];
-      this.loadBooks(search);
+      this.loadBooks(genre, search);
     });
     this.checkLoginStatus();
-    console.log('Subscribing to search queries...');
   }
 
-  loadBooks(search?: string) {
-    this.bookService.getBooks(search).subscribe({
+  loadBooks(genre?: string, search?: string) {
+    this.bookService.getBooks(search, genre).subscribe({
       next: (books) => {
         this.books = this.filteredBooks = books;
         this.cd.markForCheck(); // Manually trigger change detection
@@ -81,5 +81,4 @@ export class BookListComponent implements OnInit {
       alert('You must be logged in to add a book.');
     }
   }
-
 }

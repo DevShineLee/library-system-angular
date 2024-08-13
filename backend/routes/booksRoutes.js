@@ -5,19 +5,34 @@ const Book = require("../models/book.model")
 // get all book with search option
 router.get("/", async (req, res) => {
   try {
-    const searchQuery = req.query.search
+    const { search, genre } = req.query
     let query = Book.find()
 
-    if (searchQuery) {
-      const regex = new RegExp(escapeRegex(searchQuery), "i")
+    // When both search and genre are provided
+    if (search && genre) {
+      const regex = new RegExp(escapeRegex(search), "i")
+      query = query.where({
+        $and: [
+          { genre: genre }, // Match genre exactly
+          {
+            $or: [{ title: regex }, { author: regex }, { ISBN: regex }]
+          }
+        ]
+      })
+    } else if (search) {
+      // Only search is provided, search in all fields including genre
+      const regex = new RegExp(escapeRegex(search), "i")
       query = query.where({
         $or: [
           { title: regex },
           { author: regex },
-          { genre: regex },
-          { ISBN: regex }
+          { ISBN: regex },
+          { genre: regex }
         ]
       })
+    } else if (genre) {
+      // Only genre is provided
+      query = query.where({ genre: genre })
     }
 
     const books = await query.exec()
@@ -29,6 +44,13 @@ router.get("/", async (req, res) => {
       .json({ message: "Internal Server Error", error: error.message })
   }
 })
+
+function escapeRegex(text) {
+  return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&")
+}
+
+
+
 
 function escapeRegex(text) {
   return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&")

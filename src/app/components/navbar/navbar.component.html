@@ -11,19 +11,19 @@
           <a class="nav-link active" aria-current="page" href="book-list">Books</a>
         </li>
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
-            aria-expanded="false">
+          <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             Categories
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="#" data-genre="fiction">Fiction</a></li>
-            <li><a class="dropdown-item" href="#" data-genre="nonfiction">Non-Fiction</a></li>
-            <li><a class="dropdown-item" href="#" data-genre="science">Science</a></li>
-            <li><a class="dropdown-item" href="#" data-genre="history">History</a></li>
-            <li><a class="dropdown-item" href="#" data-genre="tech">Technology</a></li>
-            <li><a class="dropdown-item" href="#" data-genre="philosophy">Philosophy</a></li>
+            <li><a class="dropdown-item" routerLink="/book-list" [queryParams]="{ genre: 'fiction' }">Fiction</a></li>
+            <li><a class="dropdown-item" routerLink="/book-list" [queryParams]="{ genre: 'nonfiction' }">Non-Fiction</a></li>
+            <li><a class="dropdown-item" routerLink="/book-list" [queryParams]="{ genre: 'science' }">Science</a></li>
+            <li><a class="dropdown-item" routerLink="/book-list" [queryParams]="{ genre: 'history' }">History</a></li>
+            <li><a class="dropdown-item" routerLink="/book-list" [queryParams]="{ genre: 'tech' }">Technology</a></li>
+            <li><a class="dropdown-item" routerLink="/book-list" [queryParams]="{ genre: 'philosophy' }">Philosophy</a></li>
           </ul>
         </li>
+
         <!-- <li class="nav-item" *ngIf="isLoggedIn">
           <a class="nav-link" id="myPageButton" href="/my-page">My Page</a>
         </li> -->

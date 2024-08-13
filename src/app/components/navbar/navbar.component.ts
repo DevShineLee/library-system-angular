@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { BookService } from '../../services/book.service';
 import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
@@ -10,7 +10,7 @@ import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css'],
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, RouterModule, ReactiveFormsModule],
 })
 export class NavbarComponent implements OnInit {
   isLoggedIn = false;
@@ -46,5 +46,4 @@ export class NavbarComponent implements OnInit {
       this.router.navigate(['/book-list'], { queryParams: { search: query } }); // routing with query param
     }
   }
-  
 }
