@@ -1,27 +1,153 @@
-# Library
+# Library System
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.1.3.
+## Overview
 
-## Development server
+Welcome to the Library System project, a comprehensive backend solution designed to manage a library's operations efficiently. This system leverages modern web technologies to provide a robust interface for managing books, users, and their interactions with the library.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+Built using Node.js and Express, this system supports functionalities such as user registration and authentication, book management (including additions, updates, deletions), and the ability to borrow and return books. The MongoDB database is used for storing all data securely and efficiently, ensuring that user and book information is easily accessible and manageable.
 
-## Code scaffolding
+The system also includes detailed API endpoints that allow clients to interact with the library's database seamlessly. These endpoints are well-documented in this README to help developers understand and integrate the library's functionalities into any frontend system effectively.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Whether you are developing a full-fledged library management system or integrating with existing software, this project provides the necessary backend APIs to meet your needs. Detailed below are the setup instructions, npm module requirements, API endpoint descriptions, and example curl commands for testing the functionality of the system.
 
-## Build
+## Project Setup
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+### Required npm Modules:
+- `express`: Server operations
+- `mongoose`: MongoDB database management
+- `bcrypt`: Password hashing
+- `jsonwebtoken` (JWT): Handling authentication tokens
+- `body-parser` (now included in Express): Parsing incoming request bodies
+- `cors`: Enabling cross-origin resource sharing in APIs
+- `curl`: Testing APIs by making HTTP requests from the command line
 
-## Running unit tests
+## API Endpoints
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+### User Management
 
-## Running end-to-end tests
+1. **Create User**
+   - **Endpoint:** `POST /api/users/`
+   - **Description:** Registers a new user by hashing the password and storing user information.
+   - **Request Body:** 
+     ```json
+     {
+       "username": "newuser",
+       "email": "newuser@example.com",
+       "password": "password123"
+     }
+     ```
+   - **Response:** `201 Created` on success, includes a message that the user was created.
+   - **Curl Command:**
+     ```bash
+     curl -X POST http://localhost:3000/api/users/ -d 'username=newuser&email=newuser@example.com&password=password123'
+     ```
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+2. **User Login**
+   - **Endpoint:** `POST /api/users/login`
+   - **Description:** Authenticates user by comparing the hashed password and returns a JWT token.
+   - **Request Body:**
+     ```json
+     {
+       "username": "existinguser",
+       "password": "password123"
+     }
+     ```
+   - **Response:** `200 OK` on success, returns a JWT token and username.
+   - **Curl Command:**
+     ```bash
+     curl -X POST http://localhost:3000/api/users/login -d 'username=existinguser&password=password123'
+     ```
 
-## Further help
+### Book Management
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+3. **Fetch All Books**
+   - **Endpoint:** `GET /api/books/`
+   - **Description:** Retrieves all books from the database. Supports optional query parameters for search and genre to filter results.
+   - **Query Parameters:** `search` for text search across multiple fields, `genre` for filtering by specific genre.
+   - **Response:** Array of books.
+   - **Curl Command:**
+     ```bash
+     curl http://localhost:3000/api/books/
+     ```
+
+4. **Fetch Book by ID**
+   - **Endpoint:** `GET /api/books/:bookID`
+   - **Description:** Retrieves a single book by its ID.
+   - **Response:** Book object on success, `404 Not Found` if the book does not exist.
+   - **Curl Command:**
+     ```bash
+     curl http://localhost:3000/api/books/123
+     ```
+
+5. **Search Books by Any Field**
+   - **Description:** Searches across multiple book fields based on user input.
+   - **Query Parameters:** `search`: The keyword to search across book fields like title, author, ISBN, and genre.
+   - **Response:** Returns an array of book objects that match the search criteria across specified fields. If no books are found, returns an empty array.
+   - **Curl Example:**
+     ```bash
+     curl -X GET "http://localhost:3000/api/books?search=harry"
+     ```
+
+6. **Search Books by Genre**
+   - **Description:** Fetches books specifically filtered by genre.
+   - **Query Parameters:** `genre`: The specific genre to filter books by.
+   - **Response:** Returns an array of books that exclusively match the specified genre. If no books match, returns an empty array.
+   - **Curl Example:**
+     ```bash
+     curl -X GET "http://localhost:3000/api/books?genre=fiction"
+     ```
+
+7. **Update Book**
+   - **Endpoint:** `PUT /api/books/edit/:bookID`
+   - **Description:** Updates an existing book's details in the database.
+   - **Request Body:**
+     ```json
+     {
+       "title": "Updated Title",
+       "author": "Updated Author"
+     }
+     ```
+   - **Response:** Updated book object, `404 Not Found` if the book does not exist.
+   - **Curl Command:**
+     ```bash
+     curl -X PUT http://localhost:3000/api/books/edit/123 -d 'title=Updated Title&author=Updated Author'
+     ```
+
+8. **Delete Book**
+   - **Endpoint:** `DELETE /api/books/delete/:bookID`
+   - **Description:** Removes a book from the database.
+   - **Response:** `200 OK` on successful deletion, includes a success message.
+   - **Curl Command:**
+     ```bash
+     curl -X DELETE http://localhost:3000/api/books/delete/123
+     ```
+
+9. **Borrow a Book**
+   - **Endpoint:** `PUT /api/books/borrow/:bookID`
+   - **Description:** Marks a book as borrowed by a user.
+   - **Request Body:**
+     ```json
+     {
+       "userID": "user123"
+     }
+     ```
+   - **Response:** Updated book object, indicating it is borrowed.
+   - **Curl Command:**
+     ```bash
+     curl -X PUT http://localhost:3000/api/books/borrow/123 -d 'userID=user123'
+     ```
+
+10. **Return a Book**
+    - **Endpoint:** `PUT /api/books/return/:bookID`
+    - **Description:** Marks a book as returned and available.
+    - **Request Body:**
+      ```json
+      {
+       "userID": "user123"
+      }
+      ```
+    - **Response:** Updated book object, indicating it is returned.
+    - **Curl Command:**
+      ```bash
+      curl -X PUT http://localhost:3000/api/books/return/123 -d 'userID=user123'
+      ```
