@@ -65,6 +65,7 @@ export class UserService {
             sessionStorage.setItem('token', response.token);
             sessionStorage.setItem('username', response.username);
             this.loggedInStatus.next(true);
+            this.router.navigate(['/home']);
           } else {
             console.error(
               'Login response missing token or username:',
